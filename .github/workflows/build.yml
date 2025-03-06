@@ -1,0 +1,36 @@
+name: Build
+
+on:
+  push:
+  pull_request:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        arch: [x86_64]
+    runs-on: ${{ matrix.os }}
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: true
+
+    - name: Setup Cosmocc
+      uses: bjia56/setup-cosmocc@main
+      with:
+        version: "4.0.2"
+
+    - name: Setup xmake
+      uses: xmake-io/github-action-setup-xmake@v1
+      with:
+        xmake-version: branch@dev
+
+    - name: Build project
+      run: |
+        xmake f -p linux --toolchain=cosmocc -y -cvD
+        xmake -vD
