@@ -1,5 +1,4 @@
 #include <windowsesque.h>
-#include <sys/utsname.h>
 
 #define GetModuleFileNameW GetModuleFileName
 
